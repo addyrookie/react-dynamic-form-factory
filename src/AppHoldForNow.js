@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import DynamicFormFactory from "./DynamicFormFactory";
 import { Link, Route, Switch } from "react-router-dom";
+//import myconfig from "./mozillaformat";
 
 class App extends Component {
 
@@ -10,7 +11,7 @@ class App extends Component {
     super(props);
     this.state = {
       data: [],
-      config: [],
+      config: {},
       url: ""
     }
     this.handleChange = this.handleChange.bind(this);
@@ -49,7 +50,8 @@ class App extends Component {
       .then(response => response.json())
       .then(all => this.setState({ data: all } ))
 
-   fetch('http://localhost:5000/usermodel')
+   fetch('https://api.myjson.com/bins/1bzdfw')
+   //fetch('https://api.myjson.com/bins/oxom4')
       .then(response => response.json())
       .then( config => this.setState({ config: config } ))
   }
