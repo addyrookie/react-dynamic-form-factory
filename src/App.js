@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import DynamicFormFactory from "./DynamicFormFactory";
+import DynamicFormFactory from "./components/DynamicFormFactory";
 import { Link, Route, Switch } from "react-router-dom";
+import { connect } from "react-redux";
+
 
 class App extends Component {
 
