@@ -48,10 +48,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:5000/users')
-      .then(response => response.json())
-      .then(all => this.setState({ data: all } ))
-
    fetch('http://localhost:5000/usermodel')
       .then(response => response.json())
       .then( config => this.setState({ config: config } ))
@@ -59,17 +55,13 @@ class App extends Component {
 
 
   render() {
-    let club_props = { club: ""};
-    let player_props = { player: ""};
     return (
       <div className="App">
-        <Link to='/clubregistration'><button>Club Registration</button></Link>
-        <Link to='/playerdetails'><button>Player Details</button></Link>
+        <Link to='/clubregistration'><button>Club Registration</button></Link><br/>
         <input type="text" value={this.state.url} placeholder="Please enter the url for config file" onChange={this.handleChange} />
         <button onClick={this.sendConfig}>Send Config </button>
 
 
-        <Switch>
         <Route path="/clubregistration" render={ (club_props) => 
                                               <DynamicFormFactory 
                                                   {...club_props} 
@@ -77,16 +69,15 @@ class App extends Component {
                                                   defaultValues = {this.state.current}
                                                   onSubmit={(config) => this.onSubmit(config)}
                                                   title="Club Registration"/>} />
-        <Route path="/playerdetails" render={ (player_props) =>
-                                              <DynamicFormFactory 
-                                                  {...player_props}
-                                                  config={this.state.config }
-                                                  onSubmit={(config) => this.onSubmit(config)}
-                                                  title="Player Details" />} />
-        </Switch>
       </div>
     );
   }
 }
 
-export default App;
+
+
+const mapStateToProps = state => ({
+  situation: state.config,
+});
+
+export default connect(mapStateToProps)(App);
