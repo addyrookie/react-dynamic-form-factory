@@ -11,6 +11,7 @@ class App extends Component {
     this.state = {
       data: [],
       config: [],
+      current: {},
       url: ""
     }
     this.handleChange = this.handleChange.bind(this);
@@ -71,6 +72,7 @@ class App extends Component {
                                               <DynamicFormFactory 
                                                   {...club_props} 
                                                   config={this.state.config }
+                                                  defaultValues = {this.state.current}
                                                   onSubmit={(config) => this.onSubmit(config)}
                                                   title="Club Registration"/>} />
         <Route path="/playerdetails" render={ (player_props) =>

@@ -8,6 +8,8 @@ class DynamicFormFactory extends React.Component {
 		this.state = {};
 	}
 
+
+
 	formElements() {
 		let config = this.props.config;
 
@@ -27,7 +29,7 @@ class DynamicFormFactory extends React.Component {
         if (c.type == "textarea") {
             	return (
             		<textarea {...props}
-            			className="form-textarea"
+            			
             			key={c.key}
                     	name={c.key}
                     	rows="5"
@@ -76,27 +78,29 @@ class DynamicFormFactory extends React.Component {
                     if (value && value.length > 0) {
                         checked = value.indexOf(o.value) > -1 ? true: false;
                     }
+
                      return (
                         <React.Fragment key={"cfr" + o.key}>
                             <input {...props}
                                 checked={checked}
                                 value={o.value}
                                 type={c.type}
-                                key={o.key}
-                                name={o.name}
-                                onChange={(e)=>{this.onChange(e, c.key,"multiple")}}
+                                key={this.state[o.key]}
+                                name={c.value}
+                                onChange={(e)=>{this.onChange(e, o.key,"multiple")}}
                             />
                             <label key={"ll" +o.key }>{o.label}</label>
                         </React.Fragment>
                      );
                 });
 
-                input = <div className ="form-group-checkbox">{input}</div>;
+                input = <div>{input}</div>;
 
              }
         return(
-        	<div>
+        	<div key={"div"+c.key}>
         		<label key={"label" + c.key}
+                        id={c.key}
         			   htmlFor={c.key}>
         			   {c.label}
         		</label>
@@ -107,11 +111,33 @@ class DynamicFormFactory extends React.Component {
 		return mapElements;
 	}
 
-	onChange = (e,key) => {
+
+
+       onChange = (e, key,type="single") => {
+        console.log(`${key} changed ${e.target.value} type ${type}`);
+        if (type === "single") {
             this.setState({
-                [e.target.name]: e.target.value  
+                [key]: e.target.value  
             });
-        } 
+        } else {
+            let found = this.state[key] ?  
+                            this.state[key].find ((d) => d === e.target.value) : false;
+            
+            if (found) {
+                let data = this.state[key].filter((d) => {
+                    return d !== found;
+                });
+                this.setState({
+                    [key]: data
+                });
+            } else {
+                this.setState({
+                    [key]: [e.target.value]
+                });
+            }
+        }
+    }
+
 
 
 	onSubmit(e) {
@@ -124,7 +150,7 @@ class DynamicFormFactory extends React.Component {
 		return(
 			<div>
 				<h2>  {title}</h2>
-				<h1> {JSON.stringify(this.state)}</h1>
+				<h3> {JSON.stringify(this.state)}</h3>
 				<form onSubmit={ (e) => { this.onSubmit(e) } } >
 				{this.formElements()}
 				<button type="submit"> Submit Form</button>
